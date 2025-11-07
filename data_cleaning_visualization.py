@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 pd.set_option('display.max_columns', None)
 
 df = pd.read_csv(
-    "Customer_churn_prediction/WA_Fn-UseC_-Telco-Customer-Churn.csv")
+    "WA_Fn-UseC_-Telco-Customer-Churn.csv")
 df = df.drop(['customerID'], axis=1)
 # print(df.head())
 
@@ -52,5 +52,30 @@ ax2.set_title("Chart 2: Churn %")
 ax2.axis('equal')
 ax2.legend(wedges2, c_labels, title="Churned")
 
+plt.tight_layout()
+plt.show()
+
+print(df['Churn'].value_counts())
+print(df['Churn'].groupby(by=df['gender']
+                          ).value_counts().sort_index(level='Churn'))
+
+plt.figure(figsize=(6, 6))
+c_labels = df['Churn'].unique()
+values = df['Churn'].value_counts()
+colors = ['#ff6666', '#66b3ff']
+colors_gender = ['#ffb3e6', '#c2c2f0', '#ffb3e6', '#c2c2f0']
+gender_values = df['Churn'].groupby(by=df['gender']).value_counts(
+).sort_index(level='Churn')
+g_labels = gender_values.index.get_level_values(level='gender')
+explode = (0.3, 0.3)
+size = 3
+
+plt.pie(values, labels=c_labels, radius=10, explode=explode, colors=colors, startangle=90,
+        wedgeprops=dict(width=size, edgecolor='w'))
+plt.pie(gender_values, labels=g_labels, autopct='%1.1f%%', radius=10 - size, colors=colors_gender, startangle=90,
+        wedgeprops=dict(width=size, edgecolor='w'))
+plt.title('Churn Distribution w.r.t Gender: Male(M), Female(F)',
+          fontsize=15, y=1.1)
+plt.axis('equal')
 plt.tight_layout()
 plt.show()
